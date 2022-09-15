@@ -1,8 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
-import { FaStarHalfAlt } from 'react-icons/fa'
-import { useNavigate } from 'react-router-dom'
+import styled from 'styled-components' 
+import { useDispatch } from 'react-redux'
 import { Button } from 'antd'
+import { addCart } from '../../redux/slice/order'
 
 const Container = styled.div` 
     width:100%; 
@@ -24,8 +24,7 @@ const ProductCard = styled.div`
   border:1px solid gray;
   justify-content:center;
   align-items:center;
-  flex-direction:column; 
-  cursor:pointer;
+  flex-direction:column;  
   transition:.3s; 
   gap:3px;
   &:hover{ 
@@ -39,20 +38,30 @@ const Wrapper = styled.div`
   align-items:center;
   font-family: 'Roboto', sans-serif;  
 `
+const product = []
+Array(15).fill().map((e, i) => {
+  product.push({
+    id: Math.floor(Math.random().toString().substring(2, 8)),
+    image: `https://source.unsplash.com/${i + 162}x${130}/?groceries,fruit`,
+    name: `product${i + 1}`,
+    price: Number(Math.floor(Math.random().toString().substring(2, 4)))
+  })
+}) 
+
 export default () => {
-  const navigate = useNavigate()
+  const dispatch = useDispatch()
   return (
     <Container>
-
       <ProductContainer>
 
+        {/* fetch product from local database who created by random data  */}
         {
-          Array(20).fill().map((e, i) => (
-            <ProductCard>
-              <img style={{ height: "150px", maxWidth: "185px" }} src={`https://source.unsplash.com/${i + 162}x${130}/?grocery,fruit`} alt="loading..." />
+          product.map((e, i) => (
+            <ProductCard key={e.id}>
+              <img style={{ height: "150px", maxWidth: "185px" }} src={e.image} alt="loading..." />
               <Wrapper>
-                <big>product{i + 1} (<small>₹{Math.floor(Math.random().toString().substring(2, 4))}</small>)</big>
-                <Button size='small'>add</Button>
+                <big>{e.name} (<small>₹{e.price}</small>)</big>
+                <Button size='small' onClick={() => {dispatch(addCart(e))}}>add</Button>
               </Wrapper>
             </ProductCard>
           ))

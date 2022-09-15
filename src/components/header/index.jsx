@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MdOutlineShoppingCart } from 'react-icons/md'
+import { MdOutlineShoppingCart, MdPhone } from 'react-icons/md'
 import { BiUserCircle } from 'react-icons/bi'
-import { Avatar, Badge } from 'antd'
+import { Avatar, Badge, Button, Input, Modal } from 'antd'
+import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 const Container = styled.div`
     width: 100%;
@@ -27,6 +29,8 @@ const Logo = styled.h1`
 `
 const Header = () => {
     const navigate = useNavigate()
+    const [model, setModel] = useState(false)
+    const { cart } = useSelector(state => state.order)
     return (
         <Container>
             <Wrapper>
@@ -34,16 +38,29 @@ const Header = () => {
             </Wrapper>
             <Wrapper>
                 <Link to="/cart" >
-                    <Badge count={1} size="small" >
+                    <Badge count={cart.length} size="small" >
                         <MdOutlineShoppingCart size="35px" color='red' />
                     </Badge>
                 </Link>
                 &ensp;
-                <Link to="/">
-                    <BiUserCircle size="35px" color='red' />
-                </Link>
-                <Avatar style={{ background: "red" }}>DF</Avatar>
+                <BiUserCircle size="35px" color='red' onClick={() => setModel(true)}/>
+                {/* <Avatar style={{ background: "red" }}>DF</Avatar> */}
             </Wrapper>
+
+
+
+            {/* this model for user details  */}
+            <Modal visible={model} footer={false} onCancel={() => setModel(false)}>
+                <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
+                    <h1> SignUp with phone temp.. </h1>
+                    <Input prefix={<MdPhone />} style={{ width: "80%" }} size='large' placeholder='Type phone number' /> <br />
+                    <div style={{ display: "flex", gap: "20px" }}>
+                        <Button type="primary" size='large' onClick={() => setModel(false)}>Cancel</Button>
+                        <Button danger size='large'>SignUp</Button>
+                    </div><br />
+                </div>
+            </Modal>
+
 
         </Container>
     )

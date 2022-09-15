@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom"; 
 import Layout from './pages';
-import './assets/css/App.css';
-import 'antd/dist/antd.min.css';
+import './assets/css/App.css'; 
 import Home from './pages/home'; 
 import Cart from './pages/cart';  
 
