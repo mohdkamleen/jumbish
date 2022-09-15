@@ -1,5 +1,5 @@
 import React from 'react'
-import { BiCheckboxSquare } from 'react-icons/bi'
+import { BiCheckboxSquare, BiStopwatch } from 'react-icons/bi'
 import { BsTrash } from 'react-icons/bs'
 import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
@@ -46,8 +46,8 @@ export default () => {
                     <div style={{ display: "flex", fontWeight: "500", flexDirection: "column", justifyContent: "center" }}>
                       <span style={{ fontWeight: "600", fontSize: "22px", marginTop: "-10px" }}> {e.name} </span>
                       <span> id : {e.id}  </span >
-                      <span> Deliver date : 22/02/2022  </span>
-                      <span style={{ height: "25px", display: "flex", marginBottom: "5px" }}><BiCheckboxSquare size="25px" color='#2DE14A' style={{ marginLeft: "-5px" }} /> Eggless</span>
+                      <span> type : Greocery  </span>
+                      <span style={{ height: "25px", display: "flex", marginBottom: "5px" }}><BiStopwatch size="25px" color='#2DE14A' style={{ marginLeft: "-5px" }} />&nbsp; 2 min ago</span>
                       <div style={{ display: "flex" }}>
                         <div style={{ background: "#E4E7EB", width: "65px", display: "flex", justifyContent: "space-around", alignItems: "center", height: '24px', borderRadius: "5px" }}>
                           <AiOutlinePlus />
