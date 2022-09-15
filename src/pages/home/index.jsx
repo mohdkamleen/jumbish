@@ -49,9 +49,9 @@ export default () => {
         {
           Array(20).fill().map((e, i) => (
             <ProductCard>
-              <img style={{ height: "150px",maxWidth:"185px" }} src={`https://source.unsplash.com/${i+162}x${130}/?grocery,fruit`} alt="loading..." />
+              <img style={{ height: "150px", maxWidth: "185px" }} src={`https://source.unsplash.com/${i + 162}x${130}/?grocery,fruit`} alt="loading..." />
               <Wrapper>
-                <big>product{i + 1} (<small>₹{Math.floor(Math.random().toString().substring(2,4))}</small>)</big> 
+                <big>product{i + 1} (<small>₹{Math.floor(Math.random().toString().substring(2, 4))}</small>)</big>
                 <Button size='small'>add</Button>
               </Wrapper>
             </ProductCard>

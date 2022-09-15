@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { MdOutlineShoppingCart } from 'react-icons/md'
-import { BiUserCircle } from 'react-icons/bi' 
-import { Badge } from 'antd'
-import { Link, useNavigate } from 'react-router-dom'  
+import { BiUserCircle } from 'react-icons/bi'
+import { Avatar, Badge } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Container = styled.div`
     width: 100%;
@@ -24,26 +24,27 @@ const Logo = styled.h1`
     font-weight:700;
     font-size:30px;  
     cursor:pointer;
-` 
+`
 const Header = () => {
-    const navigate = useNavigate() 
+    const navigate = useNavigate()
     return (
         <Container>
             <Wrapper>
                 <Logo onClick={() => navigate("/")}> Jumbish </Logo>
-            </Wrapper> 
+            </Wrapper>
             <Wrapper>
                 <Link to="/cart" >
                     <Badge count={1} size="small" >
-                        <MdOutlineShoppingCart size="35px" color='red'/>
-                    </Badge> 
+                        <MdOutlineShoppingCart size="35px" color='red' />
+                    </Badge>
                 </Link>
                 &ensp;
                 <Link to="/">
-                    <BiUserCircle size="35px" color='red'/> 
+                    <BiUserCircle size="35px" color='red' />
                 </Link>
-            </Wrapper> 
-     
+                <Avatar style={{ background: "red" }}>DF</Avatar>
+            </Wrapper>
+
         </Container>
     )
 }
