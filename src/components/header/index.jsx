@@ -6,6 +6,7 @@ import { Badge, Input, Modal } from 'antd'
 import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { toast } from 'react-toastify'
 
 const Container = styled.div`
     width: 100%;
@@ -43,7 +44,15 @@ const Button = styled.button`
 const Header = () => {
     const navigate = useNavigate()
     const [model, setModel] = useState(false)
+    const [phone, setPhone] = useState("")
     const { cart } = useSelector(state => state.order)
+
+    const handleSignup = () => {  
+        if(!phone) return toast.warn("Pls fill phone number..") 
+        if(isNaN(phone)) return toast.warn("Char is not valid..") 
+        if(phone.length < 10 || phone.length > 10) return toast.warn("Pls enter valid phone number..") 
+    }
+
     return (
         <Container>
             <Wrapper>
@@ -56,7 +65,7 @@ const Header = () => {
                     </Badge>
                 </Link>
                 &ensp;
-                <BiUserCircle size="35px" color='red' onClick={() => setModel(true)}/>
+                <BiUserCircle size="35px" color='red' onClick={() => setModel(true)} />
                 {/* <Avatar style={{ background: "red" }}>DF</Avatar> */}
             </Wrapper>
 
@@ -66,10 +75,10 @@ const Header = () => {
             <Modal visible={model} footer={false} onCancel={() => setModel(false)}>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
                     <h1> SignUp with phone temp.. </h1>
-                    <Input size="large" prefix={<MdPhone />} style={{ width: "80%" }} placeholder='Type phone number' /> <br />
+                    <Input value={phone} type="tel" onChange={(e) => setPhone(e.target.value)} size="large" prefix={<MdPhone />} style={{ width: "80%" }} placeholder='Type phone number' /> <br />
                     <div style={{ display: "flex", gap: "20px" }}>
                         <Button onClick={() => setModel(false)}>Cancel</Button>
-                        <Button>SignUp</Button>
+                        <Button onClick={handleSignup}>SignUp</Button>
                     </div><br />
                 </div>
             </Modal>
