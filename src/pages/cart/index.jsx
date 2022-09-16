@@ -1,11 +1,11 @@
-import React from 'react'
-import { BiCheckboxSquare, BiStopwatch } from 'react-icons/bi'
+import React, { useState } from 'react'
 import { BsTrash } from 'react-icons/bs'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
 import { removeCart } from '../../redux/slice/order'
+import { Input, Modal, Select } from 'antd'
 
 const Container = styled.div`   
   margin: 30px 56px;
@@ -26,15 +26,15 @@ const Button = styled.button`
 const RowFlex = styled.div`
   display:flex;    
   justify-content:space-between; 
-  padding: 20px 0px;
-  border-bottom:1px solid lightgray;
+  padding: 20px 0px; 
 `
 export default () => {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [model, setModel] = useState(false)
   const { cart } = useSelector(state => state.order)
   return (
     <Container>
+      <h3> <Link to="/">Home</Link> &gt; cart</h3>
       {
         cart.length > 0 ? (
           <>
@@ -46,10 +46,9 @@ export default () => {
                     <div style={{ display: "flex", fontWeight: "500", flexDirection: "column", justifyContent: "center" }}>
                       <span style={{ fontWeight: "600", fontSize: "22px", marginTop: "-10px" }}> {e.name} </span>
                       <span> id : {e.id}  </span >
-                      <span> type : Greocery  </span>
-                      <span style={{ height: "25px", display: "flex", marginBottom: "5px" }}><BiStopwatch size="25px" color='#2DE14A' style={{ marginLeft: "-5px" }} />&nbsp; 2 min ago</span>
-                      <div style={{ display: "flex" }}>
-                        <div style={{ background: "#E4E7EB", width: "65px", display: "flex", justifyContent: "space-around", alignItems: "center", height: '24px', borderRadius: "5px" }}>
+                      <span> type : Greocery </span>
+                      <div style={{ display: "flex", marginTop: "7px" }}>
+                        <div style={{ background: "red", width: "65px", display: "flex", justifyContent: "space-around", alignItems: "center", height: '24px', borderRadius: "5px" }}>
                           <AiOutlinePlus />
                           <span>1</span>
                           <AiOutlineMinus />
@@ -63,9 +62,9 @@ export default () => {
               ))
             }
             <br />
-            <h1 align="right">Cart total ({cart.length === 1 ? cart.length + " item" : cart.length + " items"}): ₹ {cart.length > 1 ? cart.reduce((e, j) => e.price + j.price) : cart[0].price}.00</h1>
+            <h1>Cart total ({cart.length === 1 ? cart.length + " item" : cart.length + " items"}): ₹ {cart.length > 1 ? cart.reduce((e, j) => e.price + j.price) : cart[0].price}.00</h1>
             <br />
-            <Button>proceed to buy</Button>
+            <Button onClick={() => setModel("address")}>continue &amp; next</Button>
           </>
         ) : (
           <>
@@ -81,6 +80,46 @@ export default () => {
         )
       }
       <br />
+
+      {/* this model for address details  */}
+      <Modal visible={model === "address"} footer={false} onCancel={() => setModel(false)}>
+        <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
+          <h1> Add your address </h1>
+          <Input.TextArea style={{ width: "80%" }} rows={4} size='large' placeholder='Type your address' /> <br />
+          <div style={{ display: "flex", gap: "20px" }}>
+            <Button onClick={() => setModel(false)}>Cancel</Button>
+            <Button onClick={() => setModel("time")} >next</Button>
+          </div><br />
+        </div>
+      </Modal>
+
+      {/* this model for time deli.... details  */}
+      <Modal visible={model === "time"} footer={false} onCancel={() => setModel(false)}>
+        <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
+          <h1> Add your delivery time </h1>
+
+          <Select
+            placeholder="Select delivery time "
+            size='large'
+            style={{
+              width: "70%",
+            }}
+          >
+            <Select.Option>10am - 11am</Select.Option>
+            <Select.Option>11am - 12pm</Select.Option>
+            <Select.Option>12pm - 01pm</Select.Option>
+            <Select.Option>01pm - 02pm</Select.Option>
+            <Select.Option>02pm - 03pm</Select.Option>
+            <Select.Option>03pm - 04pm</Select.Option>
+          </Select> <br />
+          <label style={{ width: "65%" }}><input type='checkbox' /> <big>Add tip (Optional)</big> </label><br />
+          <div style={{ display: "flex", gap: "20px" }}>
+            <Button onClick={() => setModel("address")}>previous</Button>
+            <Button danger>next</Button>
+          </div><br />
+        </div>
+      </Modal>
+
     </Container >
   )
 }
