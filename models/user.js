@@ -1,38 +1,38 @@
 const mongoose = require("mongoose")
-const express = require('express')
-const app = express()
 
 
 const UserSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: [true, "Username is required, can't be blank"],
-        unique: true,
-    },
     profile: {
-        image: String,
-        fname: String,
-        lname: String,
-        phone: String,
-        email: String,
-        facebook: String,
-        instagram: String,
-        address: String,
-        about: String
+        phone: Number
     },
-    bussiness: {
-        logo: String,
-        title: String,
-        desc: String,
-        specialities: [String],
-        products: []
+    address: {
+        name: {
+            type: String,
+            default: ""
+        },
+        phone: {
+            type: String,
+            default: ""
+        },
+        pincode: {
+            type: String,
+            default: ""
+        },
+        address: {
+            type: String,
+            default: ""
+        },
+        slot: {
+            type: String,
+            default: ""
+        },
+        tip: {
+            type: Number,
+            default: ""
+        }
     },
-    gallary: [],
-    contact: [],
-    disabled:{
-        type : Boolean,
-        default : true
-    }
+    cart: [],
+    order: []
 },
     {
         timestamps: true
