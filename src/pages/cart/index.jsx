@@ -92,7 +92,7 @@ export default () => {
           <Input style={{ width: "80%" }} size="large" placeholder='Type your full name' /> <br />
           <Input style={{ width: "80%" }} size="large" placeholder='Type your phone number' /> <br />
           <Input style={{ width: "80%" }} size="large" placeholder='Pincode' /> <br />
-          <Input.TextArea style={{ width: "80%" }} rows={4} size='large' placeholder='Type your address' /> <br />
+          <Input.TextArea style={{ width: "80%" }} rows={3} size='large' placeholder='Type your address' /> <br />
           <div style={{ display: "flex", gap: "20px" }}>
             <Button onClick={() => setModel(false)}>Cancel</Button>
             <Button onClick={() => setModel("time")} >next</Button>

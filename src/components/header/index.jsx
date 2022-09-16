@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+import axios from '../../apis/axios'
 
 const Container = styled.div`
     width: 100%;
@@ -44,13 +45,14 @@ const Button = styled.button`
 const Header = () => {
     const navigate = useNavigate()
     const [model, setModel] = useState(false)
-    const [phone, setPhone] = useState("")
+    const [phone, setPhone] = useState("1234567890")
     const { cart } = useSelector(state => state.order)
 
-    const handleSignup = () => {  
-        if(!phone) return toast.warn("Pls fill phone number..") 
-        if(isNaN(phone)) return toast.warn("Char is not valid..") 
-        if(phone.length < 10 || phone.length > 10) return toast.warn("Pls enter valid phone number..") 
+    const handleSignup = async () => {
+        if (!phone) return toast.warn("Pls fill phone number..")
+        if (isNaN(phone)) return toast.warn("Char is not valid..")
+        if (phone.length < 10 || phone.length > 10) return toast.warn("Pls enter valid phone number..")
+        const res = await axios.post("/register", { phone })
     }
 
     return (
