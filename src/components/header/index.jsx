@@ -2,12 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import { MdOutlineShoppingCart } from 'react-icons/md'
 import { BiUserCircle } from 'react-icons/bi'
-import { Badge, Input, Modal } from 'antd'
-import { useSelector } from 'react-redux'
+import { Avatar, Badge, Input, Modal } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import axios from '../../apis/axios'
+import { LoginUser } from '../../redux/slice/auth'
 
 const Container = styled.div`
     width: 100%;
@@ -44,16 +45,28 @@ const Button = styled.button`
 `
 const Header = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const [model, setModel] = useState(false)
-    const [phone, setPhone] = useState("1234567890")
+    const [phone, setPhone] = useState("")
     const { cart } = useSelector(state => state.order)
+
+    
+    const handleLogout = () => {
+        setModel("")
+        localStorage.removeItem("phone")
+    }
 
     const handleSignup = async () => {
         if (!phone) return toast.warn("Pls fill phone number..")
         if (isNaN(phone)) return toast.warn("Char is not valid..")
-        if (phone.length < 10 || phone.length > 10) return toast.warn("Pls enter valid phone number..")
-        const res = await axios.post("/register", { phone })
-    }
+        if (phone.length < 10 || phone.length > 10) return toast.warn("Pls enter valid phone number..") 
+        const res = await dispatch(LoginUser({ phone }))
+        if (res.payload) {
+            localStorage.setItem("phone", phone)
+            toast.success("Login Success")
+            setModel(false)
+        }
+    } 
 
     return (
         <Container>
@@ -66,21 +79,35 @@ const Header = () => {
                         <MdOutlineShoppingCart size="35px" color='red' />
                     </Badge>
                 </Link>
-                &ensp;
-                <BiUserCircle size="35px" color='red' onClick={() => setModel(true)} />
-                {/* <Avatar style={{ background: "red" }}>DF</Avatar> */}
+                &ensp; 
+               {
+               localStorage.getItem("phone") 
+               ? <Avatar style={{ background: "red",cursor:"pointer" }} onClick={() => setModel("logout")}>DF</Avatar> 
+               : <BiUserCircle size="35px" color='red' onClick={() => setModel("login")} /> }
             </Wrapper>
 
 
 
-            {/* this model for user details  */}
-            <Modal visible={model} footer={false} onCancel={() => setModel(false)}>
+            {/* this model for login */}
+            <Modal visible={model === "login"} footer={false} onCancel={() => setModel(false)}>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
                     <h1> SignUp with phone temp.. </h1>
                     <Input value={phone} type="tel" onChange={(e) => setPhone(e.target.value)} size="large" prefix="+91" style={{ width: "80%" }} placeholder='Type phone number' /> <br />
                     <div style={{ display: "flex", gap: "20px" }}>
                         <Button onClick={() => setModel(false)}>Cancel</Button>
                         <Button onClick={handleSignup}>SignUp</Button>
+                    </div><br />
+                </div>
+            </Modal>
+
+
+            {/* this model for user logout  */}
+            <Modal visible={model === "logout"} footer={false} onCancel={() => setModel(false)}>
+                <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
+                    <h1> Are you sure want to logout </h1>
+                    <div style={{ display: "flex", gap: "20px" }}>
+                        <Button onClick={() => setModel(false)}>Cancel</Button>
+                        <Button onClick={handleLogout}>Logout</Button>
                     </div><br />
                 </div>
             </Modal>
