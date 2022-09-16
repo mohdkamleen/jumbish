@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
 import { removeCart } from '../../redux/slice/order'
-import { Input, Modal, Select } from 'antd'
+import { Input, Modal, Radio, Select, Tag } from 'antd'
 
 const Container = styled.div`   
   margin: 30px 56px;
@@ -31,7 +31,11 @@ const RowFlex = styled.div`
 export default () => {
   const dispatch = useDispatch()
   const [model, setModel] = useState(false)
+  const [tip, setTip] = useState(false)
   const { cart } = useSelector(state => state.order)
+  const onTipSelect = (e) => {
+    console.log(`radio checked:${e.target.value}`);
+  };
   return (
     <Container>
       <h3> <Link to="/">Home</Link> &gt; cart</h3>
@@ -84,7 +88,10 @@ export default () => {
       {/* this model for address details  */}
       <Modal visible={model === "address"} footer={false} onCancel={() => setModel(false)}>
         <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
-          <h1> Add your address </h1>
+          <h1> Add your address details </h1>
+          <Input style={{ width: "80%" }} size="large" placeholder='Type your full name' /> <br />
+          <Input style={{ width: "80%" }} size="large" placeholder='Type your phone number' /> <br />
+          <Input style={{ width: "80%" }} size="large" placeholder='Pincode' /> <br />
           <Input.TextArea style={{ width: "80%" }} rows={4} size='large' placeholder='Type your address' /> <br />
           <div style={{ display: "flex", gap: "20px" }}>
             <Button onClick={() => setModel(false)}>Cancel</Button>
@@ -96,10 +103,10 @@ export default () => {
       {/* this model for time deli.... details  */}
       <Modal visible={model === "time"} footer={false} onCancel={() => setModel(false)}>
         <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
-          <h1> Add your delivery time </h1>
+          <h1> Book your delivery slot </h1>
 
           <Select
-            placeholder="Select delivery time "
+            placeholder="Select delivery slot "
             size='large'
             style={{
               width: "70%",
@@ -112,7 +119,16 @@ export default () => {
             <Select.Option>02pm - 03pm</Select.Option>
             <Select.Option>03pm - 04pm</Select.Option>
           </Select> <br />
-          <label style={{ width: "65%" }}><input type='checkbox' /> <big>Add tip (Optional)</big> </label><br />
+          <label style={{ width: "65%" }}><input type='checkbox' checked={tip} onChange={() => setTip(!tip)}/> &nbsp; <big>Tip your delivery partner (optional) </big> </label><br />
+          
+         { tip && (<Radio.Group onChange={onTipSelect} defaultValue="10">
+            <Radio.Button value="10">₹ 10</Radio.Button>
+            <Radio.Button value="20">₹ 20</Radio.Button>
+            <Radio.Button value="30">₹ 30</Radio.Button>
+            <Radio.Button value="50">₹ 50</Radio.Button>
+          </Radio.Group>)
+          }
+          <br />
           <div style={{ display: "flex", gap: "20px" }}>
             <Button onClick={() => setModel("address")}>previous</Button>
             <Button danger>next</Button>
