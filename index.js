@@ -1,8 +1,7 @@
 require("dotenv").config()
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); 
-const fileUpload = require("express-fileupload")
+const cors = require('cors');  
 const app = express();
 app.use(cors()); 
 app.use(express.json());
@@ -10,7 +9,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (_req, res) => res.send('Server started'));
 
-app.use('/api', require('./routers/index'))
+app.use('/api', require('./routers/index')) 
   
 
 

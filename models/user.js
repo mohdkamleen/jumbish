@@ -3,7 +3,10 @@ const mongoose = require("mongoose")
 
 const UserSchema = new mongoose.Schema({
     profile: {
-        phone: Number
+        phone: {
+            type: Number, 
+            unique: [true, "Data already exist.."] 
+        }
     },
     address: {
         name: {
@@ -39,4 +42,4 @@ const UserSchema = new mongoose.Schema({
     }
 )
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('user', UserSchema);
