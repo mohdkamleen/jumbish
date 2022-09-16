@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MdOutlineShoppingCart, MdPhone } from 'react-icons/md'
+import { MdOutlineShoppingCart } from 'react-icons/md'
 import { BiUserCircle } from 'react-icons/bi'
 import { Badge, Input, Modal } from 'antd'
 import { useSelector } from 'react-redux'
@@ -75,7 +75,7 @@ const Header = () => {
             <Modal visible={model} footer={false} onCancel={() => setModel(false)}>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
                     <h1> SignUp with phone temp.. </h1>
-                    <Input value={phone} type="tel" onChange={(e) => setPhone(e.target.value)} size="large" prefix={<MdPhone />} style={{ width: "80%" }} placeholder='Type phone number' /> <br />
+                    <Input value={phone} type="tel" onChange={(e) => setPhone(e.target.value)} size="large" prefix="+91" style={{ width: "80%" }} placeholder='Type phone number' /> <br />
                     <div style={{ display: "flex", gap: "20px" }}>
                         <Button onClick={() => setModel(false)}>Cancel</Button>
                         <Button onClick={handleSignup}>SignUp</Button>
