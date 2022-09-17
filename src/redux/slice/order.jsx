@@ -14,9 +14,12 @@ export const authSlice = createSlice({
         },
         removeCart(state, action) {
             state.cart.splice(action.payload, 1)
+        },
+        clearCart(state, action) {
+            state.cart = []
         }
     }
 });
 
 export default authSlice.reducer;
-export const { addCart,removeCart } = authSlice.actions
+export const { addCart,removeCart,clearCart } = authSlice.actions
