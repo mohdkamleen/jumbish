@@ -1,8 +1,8 @@
 import React from 'react'
-import styled from 'styled-components' 
+import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 import { Button } from 'antd'
-import { addCart } from '../../redux/slice/order'
+import { addCart } from '../../redux/slice/order' 
 
 const Container = styled.div` 
     width:100%; 
@@ -61,7 +61,7 @@ export default () => {
               <img style={{ height: "150px", maxWidth: "185px" }} src={e.image} alt="loading..." />
               <Wrapper>
                 <big>{e.name} (<small>₹{e.price}</small>)</big>
-                <Button size='small' onClick={() => {dispatch(addCart(e))}}>add</Button>
+                <Button size='small' onClick={() => { dispatch(addCart(e)) }}>add</Button>
               </Wrapper>
             </ProductCard>
           ))

@@ -31,7 +31,7 @@ const RowFlex = styled.div`
 `
 export default () => {
   const dispatch = useDispatch()
-  const { cart } = useSelector(state => state.order)
+  const { cart } = useSelector(state => state.order) 
   const [model, setModel] = useState("")
 
   const defaultValue = {
@@ -124,7 +124,7 @@ export default () => {
       <br />
 
       {/* this model for address details  */}
-      <Modal visible={model === "address"} footer={false} onCancel={() => setModel(false)}>
+      <Modal closeIcon={true} visible={model === "address"} footer={false} onCancel={() => setModel(false)}>
         <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
           <h1> Add your address details </h1>
           <Input onChange={handleChange} name="name" style={{ width: "80%" }} size="large" placeholder='Type your full name' /> <br />
@@ -139,7 +139,7 @@ export default () => {
       </Modal>
 
       {/* this model for time deli.... details  */}
-      <Modal visible={model === "time"} footer={false} onCancel={() => setModel(false)}>
+      <Modal closeIcon={true} visible={model === "time"} footer={false} onCancel={() => setModel(false)}>
         <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
           <h1> Book your delivery slot </h1>
 
@@ -180,7 +180,7 @@ export default () => {
 
 
       {/* this model for successs   */}
-      <Modal visible={model === "success"} footer={false} onCancel={() => setModel(false)}>
+      <Modal closeIcon={true} visible={model === "success"} footer={false} onCancel={() => setModel(false)}>
         <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
           <h1> Congrates... </h1>
          <h2>We received your order</h2>
