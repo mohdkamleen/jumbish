@@ -5,7 +5,8 @@ const UserSchema = new mongoose.Schema({
     profile: {
         phone: {
             type: Number, 
-            unique: [true, "Data already exist.."] 
+            require: [true, "Data already exist.."],
+            unique: true
         }
     },
     address: {
@@ -40,6 +41,6 @@ const UserSchema = new mongoose.Schema({
     {
         timestamps: true
     }
-)
+) 
 
 module.exports = mongoose.model('user', UserSchema);
