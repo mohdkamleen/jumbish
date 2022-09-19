@@ -15,8 +15,7 @@ module.exports.register = async (req, res, next) => {
   }
 };
 
-module.exports.updateData = async (req, res, next) => {
-  console.log(req.body);
+module.exports.updateData = async (req, res, next) => { 
   try {
     const updatedAddress = await User.findByIdAndUpdate(req.body._id, { $set: req.body });
     res.status(200).json(updatedAddress);
@@ -25,8 +24,7 @@ module.exports.updateData = async (req, res, next) => {
   }
 };
 
-module.exports.addCart = async (req, res, next) => {
-  console.log(req.body);
+module.exports.addCart = async (req, res, next) => { 
   try {
     const updatedAddress = await User.findByIdAndUpdate(req.body._id, {$push : { cart: req.body.cart }});
     res.status(200).json(updatedAddress); 
