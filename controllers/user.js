@@ -15,10 +15,21 @@ module.exports.register = async (req, res, next) => {
   }
 };
 
-module.exports.fetchCurrentUser = async (req, res, next) => {
+module.exports.updateData = async (req, res, next) => {
+  console.log(req.body);
   try {
-    const newUser = User.find({ "profile.phone": req.body.phone });
-    res.status(200).json(newUser);
+    const updatedAddress = await User.findByIdAndUpdate(req.body._id, { $set: req.body });
+    res.status(200).json(updatedAddress);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.addCart = async (req, res, next) => {
+  console.log(req.body);
+  try {
+    const updatedAddress = await User.findByIdAndUpdate(req.body._id, {$push : { cart: req.body.cart }});
+    res.status(200).json(updatedAddress); 
   } catch (err) {
     next(err);
   }

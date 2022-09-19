@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router()
-const { register, fetchCurrentUser } = require('../controllers/user')
+const { register, updateData, addCart } = require('../controllers/user')
 
 router.route('/register').post(register);
-router.route('/fetchCurrentUser').get(fetchCurrentUser);
-
+router.route('/update').patch(updateData);
+router.route('/cart').patch(addCart);
+ 
  
 
 module.exports = router;
