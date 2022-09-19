@@ -1,5 +1,5 @@
-import React from 'react' 
-import { Link } from 'react-router-dom'
+import React, { useEffect } from 'react' 
+import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux' 
 
@@ -25,14 +25,18 @@ const RowFlex = styled.div`
   padding: 20px 0px; 
 `
 export default () => { 
+  const navigate = useNavigate()
   const { user } = useSelector(state => state.user)
   const { order } = user 
+ useEffect(() => {
+  !localStorage.getItem("phone") && navigate("/")
+ }, [])
  
   return (
     <Container>
       <h3> <Link to="/">Home</Link> &gt; order</h3>
       {
-        order.length > 0 ? (
+        order ? (
           <>
             {
               order.map((e, i) => (

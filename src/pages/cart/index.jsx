@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
-import { PatchData, clearUser, removeCart } from '../../redux/slice/user'
+import { PatchData, clearUser, removeCart, addOrder } from '../../redux/slice/user'
 import { Input, Modal, Radio, Select } from 'antd'
 import { toast } from 'react-toastify'
 
@@ -69,11 +69,15 @@ export default () => {
   const handleAddress = async () => {
     let { name, phone, pincode, address } = formData
     if (!name || !phone || !pincode || !address) return toast.warn("All feilds are required")
-    const resAddress = await dispatch(PatchData({
-      _id: user._id,
-      address: formData
-    }))
-    resAddress?.payload ? setModel("time") : toast.warn("Something went wrong")
+    if(localStorage.getItem("phone")){
+      const resAddress = await dispatch(PatchData({
+        _id: user._id,
+        address: formData
+      }))
+      resAddress?.payload ? setModel("time") : toast.warn("Something went wrong")
+    } else {
+      setModel("time")
+    }
   }
 
   const handleSubmit = async () => {
@@ -81,20 +85,25 @@ export default () => {
     if (!slot) return toast.warn("Pls select your slot")
     tipBox ? setFormData({ ...formData, tip: 10 }) : setFormData({ ...formData, tip: 0 })
 
-    const res = await dispatch(PatchData({
-      _id: user._id,
-      address: formData
-    }))
-    if (res?.payload) {
-      setModel("success")
-      var resOrder = await dispatch(PatchData({
+    if(localStorage.getItem("phone")){
+      const res = await dispatch(PatchData({
         _id: user._id,
-        order: cart
+        address: formData
       }))
-      resOrder?.payload && dispatch(clearUser())
+      if (res?.payload) {
+        setModel("success")
+        var resOrder = await dispatch(PatchData({
+          _id: user._id,
+          order: cart
+        }))
+        resOrder?.payload && dispatch(addOrder())  
+      } else {
+        toast.warn("Something went wrong")
+      }
     } else {
-      toast.warn("Something went wrong")
+      setModel("success")
     }
+
   }
 
   return (

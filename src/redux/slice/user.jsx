@@ -34,6 +34,9 @@ export const authSlice = createSlice({
         addCart(state, action) {
             state.user?.cart?.push(action.payload)
         },
+        addOrder(state, action) {
+            state.user?.order?.push(state.user?.cart)
+        },
         removeCart(state, action) {
             state.user?.cart.splice(action.payload, 1)
         },
@@ -66,4 +69,4 @@ export const PatchData = (data) => authenticateUser({ method: 'patch', endpoint:
 export const AddCart = (data) => authenticateUser({ method: 'patch', endpoint: 'cart', data });
 
 export default authSlice.reducer;
-export const { addCart, removeCart, clearUser } = authSlice.actions
+export const { addCart, addOrder, removeCart, clearUser } = authSlice.actions
