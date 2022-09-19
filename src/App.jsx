@@ -4,6 +4,7 @@ import Layout from './pages';
 import './assets/css/App.css'; 
 import Home from './pages/home'; 
 import Cart from './pages/cart';  
+import Order from './pages/order';  
 
 const App = () => {
   return (
@@ -13,12 +14,12 @@ const App = () => {
 
         {/* this is global routes  */}
         <Route path="/" element={<Layout />} >
-
-          {/* this is for cake section layout  */}
+ 
           <Route path='/' element={<Home />} />
-
-          {/* this is for password section layout  */}
+ 
           <Route path='/cart' element={<Cart />} />
+ 
+          <Route path='/order' element={<Order />} />
 
         </Route>
 
