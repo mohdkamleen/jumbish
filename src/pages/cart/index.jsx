@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
-import { PatchData, clearCart, removeCart } from '../../redux/slice/user'
+import { PatchData, clearUser, removeCart } from '../../redux/slice/user'
 import { Input, Modal, Radio, Select } from 'antd'
 import { toast } from 'react-toastify'
 
@@ -91,7 +91,7 @@ export default () => {
         _id: user._id,
         order: cart
       }))
-      resOrder?.payload && dispatch(clearCart())
+      resOrder?.payload && dispatch(clearUser())
     } else {
       toast.warn("Something went wrong")
     }
@@ -212,8 +212,8 @@ export default () => {
           <br />
           <div style={{ display: "flex", gap: "20px" }}>
             <Button onClick={() => setModel(false)}>Cancel</Button>
-            <Link to="/">
-              <Button >continue shopping</Button>
+            <Link to="/order">
+              <Button >Orders</Button>
             </Link>
           </div><br />
         </div>

@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { BsTrash } from 'react-icons/bs'
+import React from 'react' 
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { useSelector, useDispatch } from 'react-redux'
-import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai' 
+import { useSelector, useDispatch } from 'react-redux' 
 
 const Container = styled.div`   
   margin: 30px 56px;
@@ -26,8 +24,7 @@ const RowFlex = styled.div`
   justify-content:space-between; 
   padding: 20px 0px; 
 `
-export default () => {
-  const dispatch = useDispatch()
+export default () => { 
   const { user } = useSelector(state => state.user)
   const { order } = user 
  

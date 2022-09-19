@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from 'antd'
-import { addCart, AddCart } from '../../redux/slice/user' 
+import { addCart, AddCart } from '../../redux/slice/user'
 
 const Container = styled.div` 
     width:100%; 
@@ -46,20 +46,23 @@ Array(15).fill().map((e, i) => {
     name: `product${i + 1}`,
     price: Number(Math.floor(Math.random().toString().substring(2, 4)))
   })
-}) 
+})
 
 export default () => {
   const dispatch = useDispatch()
   const { user } = useSelector(state => state.user)
 
-  const handleCart = async(e) => {
-    const res = await dispatch(AddCart({
-      _id: user._id,
-      cart: e
-    })) 
-    res?.payload && dispatch(addCart(e))
-  }
-
+  const handleCart = async (e) => {
+    if (localStorage.getItem('phone')) {
+      const res = await dispatch(AddCart({
+        _id: user._id,
+        cart: e
+      }))
+      res?.payload && dispatch(addCart(e))
+    } else {
+      await dispatch(addCart(e))
+    }
+  } 
   return (
     <Container>
       <ProductContainer>
@@ -67,10 +70,10 @@ export default () => {
         {/* fetch product from local database who created by random data  */}
         {
           product.map((e, i) => (
-            <ProductCard key={e.id}> 
+            <ProductCard key={e.id}>
               <img style={{ height: "150px", maxWidth: "185px" }} src={e.image} alt="loading..." />
               <Wrapper>
-                <big>{e.name} (<small>₹{e.price}</small>)</big> 
+                <big>{e.name} (<small>₹{e.price}</small>)</big>
                 <Button size='small' onClick={() => handleCart(e)}>add</Button>
               </Wrapper>
             </ProductCard>

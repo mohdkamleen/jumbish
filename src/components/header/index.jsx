@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import axios from '../../apis/axios'
-import { LoginUser } from '../../redux/slice/user'
+import { clearUser, LoginUser } from '../../redux/slice/user'
 
 const Container = styled.div`
     width: 100%;
@@ -59,6 +59,7 @@ const Header = () => {
     const handleLogout = () => {
         setModel("")
         localStorage.removeItem("phone")
+        dispatch(clearUser())
     }
 
     const handleSignup = async () => {

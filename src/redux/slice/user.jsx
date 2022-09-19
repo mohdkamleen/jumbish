@@ -37,8 +37,10 @@ export const authSlice = createSlice({
         removeCart(state, action) {
             state.user?.cart.splice(action.payload, 1)
         },
-        clearCart(state, action) {
-            state.user.cart = []
+        clearUser(state, action) {
+            state.user = {
+                cart: []
+            }
         }
     },
     extraReducers: (builder) => {
@@ -48,7 +50,7 @@ export const authSlice = createSlice({
             })
             .addCase(authenticateUser.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload || null; 
+                state.user = action.payload || null;
             })
             .addCase(authenticateUser.rejected, (state, action) => {
                 state.loading = false;
@@ -64,4 +66,4 @@ export const PatchData = (data) => authenticateUser({ method: 'patch', endpoint:
 export const AddCart = (data) => authenticateUser({ method: 'patch', endpoint: 'cart', data });
 
 export default authSlice.reducer;
-export const { addCart, removeCart, clearCart } = authSlice.actions
+export const { addCart, removeCart, clearUser } = authSlice.actions
