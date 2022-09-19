@@ -91,7 +91,7 @@ export default () => {
         _id: user._id,
         order: cart
       }))
-      // if(resOrder?.payload) await dispatch(clearCart())
+      resOrder?.payload && dispatch(clearCart())
     } else {
       toast.warn("Something went wrong")
     }

@@ -61,6 +61,7 @@ export const authSlice = createSlice({
 
 export const LoginUser = (data) => authenticateUser({ method: 'post', endpoint: 'register', data });
 export const PatchData = (data) => authenticateUser({ method: 'patch', endpoint: 'update', data });
+export const AddCart = (data) => authenticateUser({ method: 'patch', endpoint: 'cart', data });
 
 export default authSlice.reducer;
 export const { addCart, removeCart, clearCart } = authSlice.actions
