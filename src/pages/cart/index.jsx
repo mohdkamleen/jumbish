@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsTrash } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
-import { clearCart, removeCart } from '../../redux/slice/order'
-import { Input, Modal, Radio, Select, Tag } from 'antd'
+import { PatchData, clearCart, removeCart } from '../../redux/slice/user'
+import { Input, Modal, Radio, Select } from 'antd'
 import { toast } from 'react-toastify'
 
 const Container = styled.div`   
@@ -31,8 +31,10 @@ const RowFlex = styled.div`
 `
 export default () => {
   const dispatch = useDispatch()
-  const { cart } = useSelector(state => state.order) 
+  const { user } = useSelector(state => state.user)
+  const { cart } = user
   const [model, setModel] = useState("")
+  const [tipBox, setTipBox] = useState(false)
 
   const defaultValue = {
     name: "",
@@ -40,10 +42,14 @@ export default () => {
     pincode: "",
     address: "",
     slot: "",
-    tip: "",
-    tipBox: false
+    tip: 0
   }
   const [formData, setFormData] = useState(defaultValue)
+
+  useEffect(() => {
+    user.address && setFormData(user.address)
+  }, [])
+
 
   const handleSlotChange = (e) => {
     setFormData({
@@ -60,18 +66,35 @@ export default () => {
     })
   }
 
-  const handleAddress = () => {
+  const handleAddress = async () => {
     let { name, phone, pincode, address } = formData
     if (!name || !phone || !pincode || !address) return toast.warn("All feilds are required")
-    setModel("time")
+    const resAddress = await dispatch(PatchData({
+      _id: user._id,
+      address: formData
+    }))
+    resAddress?.payload ? setModel("time") : toast.warn("Something went wrong")
   }
 
-  const handleSubmit = () => {
-    let { slot, tip, tipBox } = formData
+  const handleSubmit = async () => {
+    let { slot } = formData
     if (!slot) return toast.warn("Pls select your slot")
-    !tipBox ? setFormData({ ...formData, tip: '10' }) : setFormData({ ...formData, tip: "" })
-    dispatch(clearCart())
-    setModel("success")
+    tipBox ? setFormData({ ...formData, tip: 10 }) : setFormData({ ...formData, tip: 0 })
+
+    const res = await dispatch(PatchData({
+      _id: user._id,
+      address: formData
+    }))
+    if (res?.payload) {
+      setModel("success")
+      var resOrder = await dispatch(PatchData({
+        _id: user._id,
+        order: cart
+      }))
+      // if(resOrder?.payload) await dispatch(clearCart())
+    } else {
+      toast.warn("Something went wrong")
+    }
   }
 
   return (
@@ -127,10 +150,10 @@ export default () => {
       <Modal closeIcon={true} visible={model === "address"} footer={false} onCancel={() => setModel(false)}>
         <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
           <h1> Add your address details </h1>
-          <Input onChange={handleChange} name="name" style={{ width: "80%" }} size="large" placeholder='Type your full name' /> <br />
-          <Input onChange={handleChange} name="phone" style={{ width: "80%" }} size="large" placeholder='Type your phone number' /> <br />
-          <Input onChange={handleChange} name="pincode" style={{ width: "80%" }} size="large" placeholder='Pincode' /> <br />
-          <Input.TextArea onChange={handleChange} name="address" style={{ width: "80%" }} rows={3} size='large' placeholder='Type your address' /> <br />
+          <Input value={formData.name} onChange={handleChange} name="name" style={{ width: "80%" }} size="large" placeholder='Type your full name' /> <br />
+          <Input value={formData.phone} onChange={handleChange} name="phone" style={{ width: "80%" }} size="large" placeholder='Type your phone number' /> <br />
+          <Input value={formData.pincode} onChange={handleChange} name="pincode" style={{ width: "80%" }} size="large" placeholder='Pincode' /> <br />
+          <Input.TextArea value={formData.address} onChange={handleChange} name="address" style={{ width: "80%" }} rows={3} size='large' placeholder='Type your address' /> <br />
           <div style={{ display: "flex", gap: "20px" }}>
             <Button onClick={() => setModel(false)}>Cancel</Button>
             <Button onClick={handleAddress} >next</Button>
@@ -146,6 +169,7 @@ export default () => {
           <Select
             placeholder="Select delivery slot "
             size='large'
+            defaultValue={formData.slot}
             onChange={handleSlotChange}
             style={{
               width: "70%",
@@ -159,11 +183,11 @@ export default () => {
             <Select.Option value="03pm - 04pm">03pm - 04pm</Select.Option>
           </Select> <br />
           <label style={{ width: "65%" }}>
-            <input type='checkbox' checked={formData.tipBox} onChange={() => setFormData({ ...formData, tipBox: !formData.tipBox })} /> &nbsp;
+            <input type='checkbox' checked={tipBox} onChange={() => setTipBox(!tipBox)} /> &nbsp;
             <big>Tip your delivery partner (optional) </big>
           </label><br />
 
-          {formData.tipBox && (<Radio.Group name='tip' onChange={handleChange} defaultValue="10">
+          {tipBox && (<Radio.Group name='tip' onChange={handleChange} defaultValue="10">
             <Radio.Button value="10">₹ 10</Radio.Button>
             <Radio.Button value="20">₹ 20</Radio.Button>
             <Radio.Button value="30">₹ 30</Radio.Button>
@@ -183,10 +207,10 @@ export default () => {
       <Modal closeIcon={true} visible={model === "success"} footer={false} onCancel={() => setModel(false)}>
         <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
           <h1> Congrates... </h1>
-         <h2>We received your order</h2>
-         <h2>Order Id : 567834</h2>
-         <br />
-         <div style={{ display: "flex", gap: "20px" }}>
+          <h2>We received your order</h2>
+          <h2>Order Id : 567834</h2>
+          <br />
+          <div style={{ display: "flex", gap: "20px" }}>
             <Button onClick={() => setModel(false)}>Cancel</Button>
             <Link to="/">
               <Button >continue shopping</Button>

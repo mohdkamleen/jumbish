@@ -1,14 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { Md10K, MdOutlineShoppingCart } from 'react-icons/md'
-import { BiUserCircle } from 'react-icons/bi'
+import { MdOutlineShoppingCart } from 'react-icons/md'
+import { BiUser, BiUserCircle } from 'react-icons/bi'
 import { Avatar, Badge, Input, Modal, Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import axios from '../../apis/axios'
-import { LoginUser } from '../../redux/slice/auth'
+import { LoginUser } from '../../redux/slice/user'
 
 const Container = styled.div`
     width: 100%;
@@ -48,8 +48,13 @@ const Header = () => {
     const dispatch = useDispatch()
     const [model, setModel] = useState(false)
     const [phone, setPhone] = useState("")
-    const { cart } = useSelector(state => state.order)
-    const { loading } = useSelector(state => state.auth)
+    const { user,loading } = useSelector(state => state.user) 
+ 
+
+    useEffect(() => {
+        localStorage.getItem("phone") && dispatch(LoginUser({ phone: localStorage.getItem("phone") }))
+    }, [])
+
 
     const handleLogout = () => {
         setModel("")
@@ -63,66 +68,67 @@ const Header = () => {
         const res = await dispatch(LoginUser({ phone }))
         if (res.payload) {
             localStorage.setItem("phone", phone)
+            setPhone("")
             toast.success("Login Success")
             setModel(false)
         }
     }
 
     return (
-    <Container>
-        <Wrapper>
-            <Logo onClick={() => navigate("/")}> Jumbish </Logo>
-        </Wrapper>
-        <Wrapper>
-            <Link to="/cart" >
-                <Badge count={cart.length} size="small" >
-                    <MdOutlineShoppingCart size="35px" color='red' />
-                </Badge>
-            </Link>
-            &ensp;
+        <Container>
+            <Wrapper>
+                <Logo onClick={() => navigate("/")}> Jumbish </Logo>
+            </Wrapper>
+            <Wrapper>
+                <Link to="/cart" >
+                    <Badge count={user?.cart?.length} size="small" >
+                        <MdOutlineShoppingCart size="35px" color='red' />
+                    </Badge>
+                </Link>
+                &ensp;
+                {
+                    localStorage.getItem("phone")
+                        ? <Avatar style={{ background: "red", cursor: "pointer" }} onClick={() => setModel("logout")}><BiUser size="30px" /></Avatar>
+                        : <BiUserCircle size="35px" color='red' onClick={() => setModel("login")} />}
+            </Wrapper>
+
+            {/* loading model  */}
             {
-                localStorage.getItem("phone")
-                    ? <Avatar style={{ background: "red", cursor: "pointer" }} onClick={() => setModel("logout")}>DF</Avatar>
-                    : <BiUserCircle size="35px" color='red' onClick={() => setModel("login")} />}
-        </Wrapper>
-
-        {/* loading model  */}
-        {
-            loading && (
-                <Modal visible={true} footer={false} centered width={100} closeIcon={true}>
-                    <Spin size='large' tip="Loading.." />
-                </Modal>
+                loading && (
+                    <Modal visible={true} footer={false} centered width={100} closeIcon={true}>
+                        <Spin size='large' tip="Loading.." />
+                    </Modal>
                 )
-        }
+            }
 
 
-        {/* this model for login */}
-        <Modal closeIcon={true} visible={model === "login"} footer={false} onCancel={() => setModel(false)}>
-            <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
-                <h1> SignUp with phone temp.. </h1>
-                <Input value={phone} type="tel" onChange={(e) => setPhone(e.target.value)} size="large" prefix="+91" style={{ width: "80%" }} placeholder='Type phone number' /> <br />
-                <div style={{ display: "flex", gap: "20px" }}>
-                    <Button onClick={() => setModel(false)}>Cancel</Button>
-                    <Button onClick={handleSignup}>SignUp</Button>
-                </div><br />
-            </div>
-        </Modal>
+            {/* this model for login */}
+            <Modal closeIcon={true} visible={model === "login"} footer={false} onCancel={() => setModel(false)}>
+                <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
+                    <h1> SignUp with phone temp.. </h1>
+                    <Input value={phone} type="tel" onChange={(e) => setPhone(e.target.value)} size="large" prefix="+91" style={{ width: "80%" }} placeholder='Type phone number' /> <br />
+                    <div style={{ display: "flex", gap: "20px" }}>
+                        <Button onClick={() => setModel(false)}>Cancel</Button>
+                        <Button onClick={handleSignup}>SignUp</Button>
+                    </div><br />
+                </div>
+            </Modal>
 
 
-        {/* this model for user logout  */}
-        <Modal closeIcon={true} visible={model === "logout"} footer={false} onCancel={() => setModel(false)}>
-            <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
-                <h1> Are you sure want to logout </h1>
-                <div style={{ display: "flex", gap: "20px" }}>
-                    <Button onClick={() => setModel(false)}>Cancel</Button>
-                    <Button onClick={handleLogout}>Logout</Button>
-                </div><br />
-            </div>
-        </Modal>
+            {/* this model for user logout  */}
+            <Modal closeIcon={true} visible={model === "logout"} footer={false} onCancel={() => setModel(false)}>
+                <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
+                    <h1> Are you sure want to logout </h1>
+                    <div style={{ display: "flex", gap: "20px" }}>
+                        <Button onClick={() => setModel(false)}>Cancel</Button>
+                        <Button onClick={handleLogout}>Logout</Button>
+                    </div><br />
+                </div>
+            </Modal>
 
 
-    </Container>
-    ) 
+        </Container>
+    )
 }
 
 export default Header

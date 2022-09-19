@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 import { Button } from 'antd'
-import { addCart } from '../../redux/slice/order' 
+import { addCart } from '../../redux/slice/user' 
 
 const Container = styled.div` 
     width:100%; 

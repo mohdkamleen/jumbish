@@ -1,6 +1,8 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from '../../apis/axios';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
+import axios from '../../apis/axios';
+
+
 
 export const authenticateUser = createAsyncThunk(
     'auth/authenticateUser',
@@ -20,13 +22,25 @@ export const authenticateUser = createAsyncThunk(
 
 const initialState = {
     loading: false,
-    user: null
+    user: {
+        cart: []
+    }
 };
 
 export const authSlice = createSlice({
     name: 'Authentication',
     initialState,
-    reducers: { },
+    reducers: {
+        addCart(state, action) {
+            state.user?.cart?.push(action.payload)
+        },
+        removeCart(state, action) {
+            state.user?.cart.splice(action.payload, 1)
+        },
+        clearCart(state, action) {
+            state.user.cart = []
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(authenticateUser.pending, (state) => {
@@ -34,16 +48,19 @@ export const authSlice = createSlice({
             })
             .addCase(authenticateUser.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload || null;
-
+                state.user = action.payload || null; 
             })
             .addCase(authenticateUser.rejected, (state, action) => {
                 state.loading = false;
-                state.user = null;
+                state.user = action.payload || null;
             });
     },
 });
 
-export const LoginUser = (data) => authenticateUser({ method: 'post', endpoint: 'register', data }); 
+
+
+export const LoginUser = (data) => authenticateUser({ method: 'post', endpoint: 'register', data });
+export const PatchData = (data) => authenticateUser({ method: 'patch', endpoint: 'update', data });
 
 export default authSlice.reducer;
+export const { addCart, removeCart, clearCart } = authSlice.actions
