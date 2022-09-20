@@ -136,7 +136,7 @@ export default () => {
               ))
             }
             <br />
-            <h1>Cart total ({cart.length === 1 ? cart.length + " item" : cart.length + " items"}): ₹ {cart.length > 1 ? cart.reduce((e, j) => e.price + j.price) : cart[0].price}.00</h1>
+            <h1>Cart total (₹{ cart.map(e=>e.price).reduce((i,j)=>i+j,0) }.00)</h1>
             <br />
             <Button onClick={() => setModel("address")}>continue &amp; next</Button>
           </>
