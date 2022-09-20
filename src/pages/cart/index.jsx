@@ -112,7 +112,11 @@ export default () => {
       {
         cart.length > 0 ? (
           <>
-            {
+
+          {/* {
+            console.log(cart.map(e=>e.id).filter((i,j,self)=>self.indexOf(i) === j))
+          } */}
+            { 
               cart.map((e, i) => (
                 <RowFlex key={i}>
                   <div className="order-card-left-part" style={{ display: "flex", gap: "20px" }}>
@@ -136,7 +140,7 @@ export default () => {
               ))
             }
             <br />
-            <h1>Cart total (₹{ cart.map(e=>e.price).reduce((i,j)=>i+j,0) }.00)</h1>
+            <h1>Cart total ({cart.length === 1 ? cart.length+" item" : cart.length+" items"}) : ₹{ cart.map(e=>e.price).reduce((i,j)=>i+j,0) }.00</h1>
             <br />
             <Button onClick={() => setModel("address")}>continue &amp; next</Button>
           </>
